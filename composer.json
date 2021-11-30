@@ -55,7 +55,7 @@
                 "Pbmengine\\Stream\\StreamServiceProvider"
             ],
             "aliases": {
-                "PbmStream": "Pbmengine\\Stream\\StreamFacade"
+                "Stream": "Pbmengine\\Stream\\Facades\\Stream"
             }
         }
     }

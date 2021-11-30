@@ -1,13 +1,13 @@
 <?php
 
-namespace Pbmengine\Stream;
+namespace Pbmengine\Stream\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
  * @see \Pbmengine\Stream\Stream
  */
-class StreamFacade extends Facade
+class Stream extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -16,6 +16,6 @@ class StreamFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'stream';
+        return \Pbmengine\Stream\Stream::class;
     }
 }
