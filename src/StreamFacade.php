@@ -16,6 +16,6 @@ class StreamFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'pbm-stream';
+        return 'stream';
     }
 }
