@@ -1,0 +1,62 @@
+{
+    "name": "pbmengine/pbm-stream-sdk",
+    "description": "SDK for using PBM Stream API",
+    "keywords": [
+        "pbm",
+        "pbm-stream-sdk"
+    ],
+    "homepage": "https://github.com/pbmengine/pbm-stream-sdk",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stefan Riehl",
+            "email": "ext-stefan@personal-business-machine.com",
+            "homepage": "https://personal-business-machine.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "guzzlehttp/guzzle": "^7.4",
+        "illuminate/config": "^8.0",
+        "illuminate/contracts": "^8.0",
+        "illuminate/http": "^8.0",
+        "illuminate/support": "^8.0"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.4",
+        "orchestra/testbench": "^6.23",
+        "pestphp/pest-plugin-laravel": "^1.1",
+        "phpstan/phpstan": "^0.12.8",
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pbmengine\\Stream\\": "src"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pbmengine\\Stream\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Pbmengine\\Stream\\StreamServiceProvider"
+            ],
+            "aliases": {
+                "PbmStream": "Pbmengine\\Stream\\\\StreamFacade"
+            }
+        }
+    }
+}
