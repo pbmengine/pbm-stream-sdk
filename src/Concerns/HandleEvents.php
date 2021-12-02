@@ -26,11 +26,4 @@ trait HandleEvents
             ->client()
             ->delete("/projects/{$this->project}/collections/{$this->collection}/events/{$eventId}");
     }
-
-    public function query(): Response
-    {
-        return $this
-            ->client()
-            ->post("/projects/{$this->project}/collections/{$this->collection}/query");
-    }
 }

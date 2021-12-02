@@ -6,6 +6,7 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Pbmengine\Stream\Concerns\HandleEvents;
 use Pbmengine\Stream\Concerns\HandleProjects;
+use Pbmengine\Stream\Concerns\HandleQueries;
 use Pbmengine\Stream\Concerns\HandleStatus;
 use Pbmengine\Stream\Concerns\HandleTests;
 
@@ -15,6 +16,7 @@ class Stream
     use HandleProjects;
     use HandleStatus;
     use HandleTests;
+    use HandleQueries;
 
     protected ?string $collection = null;
     protected int $timeout = 5;
@@ -33,6 +35,11 @@ class Stream
         return $this;
     }
 
+    public function getProject(): string
+    {
+        return $this->project;
+    }
+
     public function setAccessKey(string $accessKey): self
     {
         $this->accessKey = $accessKey;
@@ -47,6 +54,11 @@ class Stream
         return $this;
     }
 
+    public function getCollection(): string
+    {
+        return $this->collection;
+    }
+
     public function setTimeout(int $timeout): self
     {
         $this->timeout = $timeout;
@@ -54,7 +66,7 @@ class Stream
         return $this;
     }
 
-    protected function client(): PendingRequest
+    public function client(): PendingRequest
     {
         return Http::withHeaders([
             'Authorization' => $this->accessKey,

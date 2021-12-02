@@ -37,7 +37,7 @@ Now you can use the stream api.
 stream('logins')->record(['user' => 1, 'age' => 30]);
 
 # via Facade
-PbmStream::collection('logins')->record(['user' => 1, 'age' => 30]);
+\Pbmengine\Stream\Facades\Stream::collection('logins')->record(['user' => 1, 'age' => 30]);
 ```
 
 Available methods
@@ -69,8 +69,26 @@ stream('logins')->createIndex('<field>');
 # drop collection index
 stream('logins')->dropIndex('<field>');
 
-# test event if usable
+# test event to check if it's usable
 stream()->testEvent(['user' => 2, 'age' => 10]);
+
+# queries
+stream('logins')
+    ->query()
+    ->select()
+    ->where('a', '=', 2) // = < <= > >= != like
+    ->whereIn('field', ['array', '...']) 
+    ->timeFrame('start', 'end')
+    ->timeFrame(TimeFrame::Last3DAYS)
+    ->orWhere('b', '>', 6)
+    ->orWhere(function($query) {
+        $query->where('c', '<', 8)->where('d', '=', 'test');
+    })
+    ->groupBy('field') // (['field a', 'field b'])
+    ->orderBy('field') // -field or ['field a', '-field b']
+    ->interval(TimeInterval::DAILY)
+    ->count(); // sum(field) | avg(field) | max(field) | min(field) | countUnique(field) | selectUnique(field) 
+
 ```
 
 ### Changelog
