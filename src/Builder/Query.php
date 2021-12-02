@@ -42,6 +42,11 @@ class Query
     protected ?array $orders = null;
 
     /**
+     * Should the query be paginated.
+     */
+    protected bool $pagination = false;
+
+    /**
      * The maximum number of records to return.
      */
     protected int $limit = 15;
@@ -289,6 +294,20 @@ class Query
 
     public function get(): Response
     {
+        $this->pagination = false;
+
+        return $this->request();
+    }
+
+    public function paginate(): Response
+    {
+        $this->pagination = true;
+
+        return $this->request();
+    }
+
+    protected function request(): Response
+    {
         return $this->stream
             ->client()
             ->post(
@@ -312,6 +331,7 @@ class Query
             'distinct' => $this->distinct,
             'limit' => $this->limit,
             'offset' => $this->offset,
+            'pagination' => $this->pagination,
             'aggregate' => $this->aggregate,
             'timeFrame' => $this->timeFrame,
             'interval' => $this->interval,
