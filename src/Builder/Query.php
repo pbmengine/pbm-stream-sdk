@@ -293,7 +293,7 @@ class Query
             ->client()
             ->post(
                 "/projects/{$this->stream->getProject()}/collections/{$this->stream->getCollection()}/query",
-                [$this->explain()]
+                $this->explain()
             );
     }
 
