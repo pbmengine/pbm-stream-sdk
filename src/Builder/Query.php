@@ -24,7 +24,7 @@ class Query
      * Indicates if the query returns distinct results.
      * Occasionally contains the columns that should be distinct.
      */
-    protected ?array $distinct = null;
+    protected bool $distinct = false;
 
     /**
      * Aggregate function and column to be run
@@ -258,9 +258,13 @@ class Query
         return $this->setAggregate(__FUNCTION__, [$columns])->get();
     }
 
-    public function distinct(array $columns): self
+    public function distinct($column = false): self
     {
-        $this->distinct = $columns;
+        $this->distinct = true;
+
+        if ($column) {
+            $this->columns = [$column];
+        }
 
         return $this;
     }
