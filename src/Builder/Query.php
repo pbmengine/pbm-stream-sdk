@@ -49,7 +49,7 @@ class Query
     /**
      * The maximum number of records to return.
      */
-    protected int $limit = 15;
+    protected int $limit = 0;
 
     /**
      * The number of records to skip.
