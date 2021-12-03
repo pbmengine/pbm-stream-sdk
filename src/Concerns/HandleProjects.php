@@ -45,6 +45,6 @@ trait HandleProjects
     {
         return $this
             ->client()
-            ->post("/projects/{$this->project}/collections/{$this->collection}/validation");
+            ->post("/projects/{$this->project}/collections/{$this->collection}/validation", $event);
     }
 }
