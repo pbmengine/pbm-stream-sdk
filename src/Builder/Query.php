@@ -68,6 +68,11 @@ class Query
     protected ?string $interval = null;
 
     /**
+     * pipeline as array see aggregation pipelines
+     */
+    protected ?array $pipeline = null;
+
+    /**
      * All of the available clause operators.
      */
     public array $operators = [
@@ -267,6 +272,13 @@ class Query
         }
 
         return $this;
+    }
+
+    public function aggregate(array $pipeline): Response
+    {
+        $this->pipeline = $pipeline;
+
+        return $this->get();
     }
 
     public function countUnique(string $key): Response
