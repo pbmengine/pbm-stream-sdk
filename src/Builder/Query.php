@@ -271,7 +271,7 @@ class Query
 
     public function countUnique(string $key): Response
     {
-        $this->distinct = [$key];
+        $this->distinct($key);
 
         return $this->count($key);
     }
