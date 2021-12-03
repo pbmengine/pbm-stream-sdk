@@ -2,8 +2,8 @@ This PHP package skeleton is inspired by the awesome [Spatie Package](https://gi
 
 # PBM Stream API SDK
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/gemzio/pbm-stream-sdk.svg?style=flat-square)](https://packagist.org/packages/gemzio/:package_name)
-[![Total Downloads](https://img.shields.io/packagist/dt/gemzio/pbm-stream-sdk.svg?style=flat-square)](https://packagist.org/packages/gemzio/:package_name)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/gemzio/pbm-stream-sdk.svg?style=flat-square)](https://packagist.org/packages/pbmengine/pbm-stream-sdk)
+[![Total Downloads](https://img.shields.io/packagist/dt/gemzio/pbm-stream-sdk.svg?style=flat-square)](https://packagist.org/packages/pbmengine/pbm-stream-sdk)
 
 ## Installation
 
@@ -69,25 +69,29 @@ stream('logins')->createIndex('<field>');
 # drop collection index
 stream('logins')->dropIndex('<field>');
 
-# test event to check if it's usable
+# test event to check if it's a valid event
+# you do not need any collection for this request
 stream()->testEvent(['user' => 2, 'age' => 10]);
 
 # queries
 stream('logins')
     ->query()
-    ->select()
-    ->where('a', '=', 2) // = < <= > >= != like
+    ->where('a', '=', 2)
     ->whereIn('field', ['array', '...']) 
-    ->timeFrame('start', 'end')
-    ->timeFrame(TimeFrame::Last3DAYS)
     ->orWhere('b', '>', 6)
-    ->orWhere(function($query) {
-        $query->where('c', '<', 8)->where('d', '=', 'test');
-    })
+    ->timeFrame('start', 'end')
+    ->timeFrame(TimeFrame::THIS_DAYS, 5)
     ->groupBy('field') // (['field a', 'field b'])
     ->orderBy('field') // -field or ['field a', '-field b']
-    ->interval(TimeInterval::DAILY)
     ->count(); // sum(field) | avg(field) | max(field) | min(field) | countUnique(field) | selectUnique(field) 
+
+# complex queries
+# for more complex queries use the aggregate function
+stream('pages')
+    ->query()
+    ->aggregate([
+        ['$match' => ['event' => 'pageViewed']]
+    ]);
 
 ```
 
