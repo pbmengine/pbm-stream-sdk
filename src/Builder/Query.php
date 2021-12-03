@@ -351,6 +351,7 @@ class Query
             'aggregate' => $this->aggregate,
             'timeFrame' => $this->timeFrame,
             'interval' => $this->interval,
+            'pipeline' => $this->pipeline,
         ];
     }
 }
