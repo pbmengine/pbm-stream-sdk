@@ -145,17 +145,6 @@ class Query
         return $this;
     }
 
-    public function interval(string $interval): self
-    {
-        if (!Interval::exists($interval)) {
-            throw new \InvalidArgumentException('interval ' . $interval . ' does not exist');
-        }
-
-        $this->interval = $interval;
-
-        return $this;
-    }
-
     public function select(array $columns = ['*']): self
     {
         $this->columns = $columns;
