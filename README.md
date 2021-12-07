@@ -46,10 +46,10 @@ Available methods
 stream('logins')->record(['user' => 1, 'age' => 30]);
 
 # update event
-stream('logins')->update('<event id>', ['age' => 30]);
+stream('logins')->updateEvent('<event id>', ['age' => 30]);
 
 # delete event
-stream('logins')->update('<event id>');
+stream('logins')->deleteEvent('<event id>');
 
 # get project information
 stream()->project();
@@ -74,16 +74,24 @@ stream('logins')->dropIndex('<field>');
 stream()->testEvent(['user' => 2, 'age' => 10]);
 
 # queries
-stream('logins')
+$response = stream('logins')
     ->query()
-    ->where('a', '=', 2)
-    ->whereIn('field', ['array', '...']) 
-    ->orWhere('b', '>', 6)
-    ->timeFrame('start', 'end')
-    ->timeFrame(TimeFrame::THIS_DAYS, 5)
-    ->groupBy('field') // (['field a', 'field b'])
-    ->orderBy('field') // -field or ['field a', '-field b']
-    ->count(); // sum(field) | avg(field) | max(field) | min(field) | countUnique(field) | selectUnique(field) 
+        ->where('a', '=', 2)
+        ->whereIn('field', ['array', '...']) 
+        ->orWhere('b', '>', 6)
+        ->timeFrame('start', 'end')
+        ->timeFrame(TimeFrame::THIS_DAYS, 5)
+        ->groupBy('field') // (['field a', 'field b'])
+        ->orderBy('field') // -field or ['field a', '-field b']
+        ->count(); // sum(field) | avg(field) | max(field) | min(field) | countUnique(field) | selectUnique(field)
+
+// get events with pagination
+$response = stream('pages')
+    ->query()
+    ->where('event', '=', 'page.viewed')
+    ->orderByDesc('timestamp')
+    ->forPage(3, 30)
+    ->get();
 
 # complex queries
 # for more complex queries use the aggregate function
