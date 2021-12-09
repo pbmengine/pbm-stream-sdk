@@ -304,9 +304,11 @@ class Query
         return $this->request();
     }
 
-    public function paginate(): Response
+    public function paginate(int $perPage = 15, int $page = 1): Response
     {
         $this->pagination = true;
+
+        $this->forPage($page, $perPage);
 
         return $this->request();
     }

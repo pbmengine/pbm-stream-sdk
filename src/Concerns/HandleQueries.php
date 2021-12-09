@@ -10,6 +10,4 @@ trait HandleQueries
     {
         return new Query($this);
     }
-
-
 }
