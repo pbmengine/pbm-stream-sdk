@@ -85,13 +85,19 @@ $response = stream('logins')
         ->orderBy('field') // -field or ['field a', '-field b']
         ->count(); // sum(field) | avg(field) | max(field) | min(field) | countUnique(field) | selectUnique(field)
 
+// get events
+$response = stream('pages')
+    ->query()
+    ->where('event', '=', 'page.viewed')
+    ->orderByDesc('timestamp')
+    ->get();
+
 // get events with pagination
 $response = stream('pages')
     ->query()
     ->where('event', '=', 'page.viewed')
     ->orderByDesc('timestamp')
-    ->forPage(3, 30)
-    ->get();
+    ->paginate(10, 1); // per page 10 events on page 1
 
 # complex queries
 # for more complex queries use the aggregate function
