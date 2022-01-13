@@ -1,5 +1,3 @@
-This PHP package skeleton is inspired by the awesome [Spatie Package](https://github.com/spatie/skeleton-php) 
-
 # PBM Stream API SDK
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/gemzio/pbm-stream-sdk.svg?style=flat-square)](https://packagist.org/packages/pbmengine/pbm-stream-sdk)
