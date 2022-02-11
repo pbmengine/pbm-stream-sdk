@@ -20,12 +20,15 @@ class Stream
 
     protected ?string $collection = null;
     protected int $timeout = 5;
+    protected string $url;
+    protected string $project;
+    protected string $accessKey;
 
-    public function __construct(
-        protected string $url,
-        protected string $project,
-        protected string $accessKey
-    ) {
+    public function __construct($url, $project, $accessKey)
+    {
+        $this->url = $url;
+        $this->project = $project;
+        $this->accessKey = $accessKey;
     }
 
     public function setProject(string $project): self

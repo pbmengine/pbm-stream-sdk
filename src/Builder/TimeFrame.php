@@ -70,26 +70,42 @@ class TimeFrame
 
     protected static function getStartDateOfUnit(Carbon $date, string $unit, int $value): Carbon
     {
-        return match($unit) {
-            'minute' => $date->subMinutes($value)->startOfMinute(),
-            'hour' => $date->subHours($value)->startOfHour(),
-            'day' => $date->subDays($value)->startOfDay(),
-            'week' => $date->subWeeks($value)->startOfWeek(),
-            'month' => $date->subMonths($value)->startOfMonth(),
-            'year' => $date->subYears($value)->startOfYear(),
-        };
+        switch($unit) {
+            case('minute'):
+                return $date->subMinutes($value)->startOfMinute();
+            case('hour'):
+                return $date->subHours($value)->startOfHour();
+            case('day'):
+                return $date->subDays($value)->startOfDay();
+            case('week'):
+                return $date->subWeeks($value)->startOfWeek();
+            case('month'):
+                return $date->subMonths($value)->startOfMonth();
+            case('year'):
+                return $date->subYears($value)->startOfYear();
+            default:
+                return now();
+        }
     }
 
     protected static function getEndDateOfUnit(Carbon $date, string $unit, int $value): Carbon
     {
-        return match($unit) {
-            'minute' => $date->subMinutes(1)->endOfMinute(),
-            'hour' => $date->subHours(1)->endOfHour(),
-            'day' => $date->subDays(1)->endOfDay(),
-            'week' => $date->subWeeks(1)->endOfWeek(),
-            'month' => $date->subMonths(1)->endOfMonth(),
-            'year' => $date->subYears(1)->endOfYear(),
-        };
+        switch($unit) {
+            case('minute'):
+                return $date->subMinutes(1)->endOfMinute();
+            case('hour'):
+                return $date->subHours(1)->endOfHour();
+            case('day'):
+                return $date->subDays(1)->endOfDay();
+            case('week'):
+                return $date->subWeeks(1)->endOfWeek();
+            case('month'):
+                return $date->subMonths(1)->endOfMonth();
+            case('year'):
+                return $date->subYears(1)->endOfYear();
+            default:
+                return now();
+        }
     }
 
     protected static function getUnit(string $key): string

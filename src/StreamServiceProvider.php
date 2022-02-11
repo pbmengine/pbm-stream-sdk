@@ -27,9 +27,9 @@ class StreamServiceProvider extends ServiceProvider
 
         $this->app->singleton(Stream::class, function ($app) {
             return new Stream(
-                url: $app['config']['pbm-stream']['url'],
-                project: $app['config']['pbm-stream']['project'],
-                accessKey: $app['config']['pbm-stream']['access_key']
+                $app['config']['pbm-stream']['url'],
+                $app['config']['pbm-stream']['project'],
+                $app['config']['pbm-stream']['access_key']
             );
         });
     }
