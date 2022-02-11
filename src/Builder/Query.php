@@ -10,6 +10,8 @@ use Pbmengine\Stream\Stream;
 
 class Query
 {
+    protected Stream $stream;
+
     /**
      * The where constraints for the query.
      */
@@ -85,10 +87,12 @@ class Query
         'box', 'polygon', 'uniquedocs',
     ];
 
-    public function __construct(protected Stream $stream)
-    {}
+    public function __construct(Stream $stream)
+    {
+        $this->stream = $stream;
+    }
 
-    public function groupBy(string|array ...$groups): self
+    public function groupBy(...$groups): self
     {
         foreach ($groups as $group) {
             $this->groups = array_merge(
