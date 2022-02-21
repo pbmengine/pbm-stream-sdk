@@ -104,7 +104,12 @@ class Query
         return $this;
     }
 
-    public function orderBy(string $column, $direction = 'asc'): self
+    /**
+     * @param string $column
+     * @param string $direction
+     * @return $this
+     */
+    public function orderBy($column, $direction = 'asc'): self
     {
         $direction = strtolower($direction);
 
@@ -120,43 +125,73 @@ class Query
         return $this;
     }
 
-    public function orderByDesc(string $column): self
+    /**
+     * @param string $column
+     * @return $this
+     */
+    public function orderByDesc($column): self
     {
         return $this->orderBy($column, 'desc');
     }
 
-    public function take(int $value): self
+    /**
+     * @param int $value
+     * @return $this
+     */
+    public function take($value): self
     {
         return $this->limit($value);
     }
 
-    public function limit(int $value): self
+    /**
+     * @param int $value
+     * @return $this
+     */
+    public function limit($value): self
     {
         $this->limit = (int)$value;
 
         return $this;
     }
 
-    public function forPage(int $page, $perPage = 15): self
+    /**
+     * @param int $page
+     * @param int $perPage
+     * @return $this
+     */
+    public function forPage($page, $perPage = 15): self
     {
         return $this->offset(((int)$page - 1) * $perPage)->limit($perPage);
     }
 
-    public function offset(int $value): self
+    /**
+     * @param int $value
+     * @return $this
+     */
+    public function offset($value): self
     {
         $this->offset = max(0, (int)$value);
 
         return $this;
     }
 
-    public function select(array $columns = ['*']): self
+    /**
+     * @param array $columns
+     * @return $this
+     */
+    public function select($columns = ['*']): self
     {
         $this->columns = $columns;
 
         return $this;
     }
 
-    public function timeFrame(mixed $start, mixed $end): self
+    /**
+     * @param mixed $start
+     * @param mixed $end
+     * @return $this
+     */
+    public function timeFrame($start, $end): self
     {
         if (TimeFrame::inKeys($start) && is_int($end)) {
             $this->timeFrame = TimeFrame::byKey($start, (int)$end);
@@ -195,7 +230,14 @@ class Query
         return $this;
     }
 
-    public function where(string $column, string $operator, mixed $value, string $boolean = 'and'): self
+    /**
+     * @param string $column
+     * @param string $operator
+     * @param mixed $value
+     * @param string $boolean
+     * @return $this
+     */
+    public function where($column, $operator, $value, $boolean = 'and'): self
     {
         $type = 'basic';
 
@@ -206,14 +248,27 @@ class Query
         return $this;
     }
 
-    public function orWhere(string $column, string $operator, mixed $value): self
+    /**
+     * @param string $column
+     * @param string $operator
+     * @param mixed $value
+     * @return $this
+     */
+    public function orWhere($column, $operator, $value): self
     {
         $this->where($column, $operator, $value, 'or');
 
         return $this;
     }
 
-    public function whereIn(string $column, mixed $values, string $boolean = 'and', bool $not = false): self
+    /**
+     * @param string $column
+     * @param mixed $values
+     * @param string $boolean
+     * @param bool $not
+     * @return $this
+     */
+    public function whereIn($column, $values, $boolean = 'and', $not = false): self
     {
         $type = $not ? 'NotIn' : 'In';
 
@@ -229,22 +284,43 @@ class Query
         return $this;
     }
 
-    public function orWhereIn(string $column, mixed $values): self
+    /**
+     * @param string $column
+     * @param mixed $values
+     * @return $this
+     */
+    public function orWhereIn($column, $values): self
     {
         return $this->whereIn($column, $values, 'or');
     }
 
-    public function whereNotIn(string $column, mixed $values, string $boolean = 'and'): self
+    /**
+     * @param string $column
+     * @param mixed $values
+     * @param string $boolean
+     * @return $this
+     */
+    public function whereNotIn($column, $values, $boolean = 'and'): self
     {
         return $this->whereIn($column, $values, $boolean, true);
     }
 
-    public function orWhereNotIn(string $column, mixed $values): self
+    /**
+     * @param string $column
+     * @param mixed $values
+     * @return $this
+     */
+    public function orWhereNotIn($column, $values): self
     {
         return $this->whereNotIn($column, $values, 'or');
     }
 
-    protected function setAggregate(string $function, array $columns): self
+    /**
+     * @param string $function
+     * @param array $columns
+     * @return $this
+     */
+    protected function setAggregate($function, $columns): self
     {
         $this->aggregate = compact('function', 'columns');
 
@@ -267,36 +343,60 @@ class Query
         return $this;
     }
 
-    public function aggregate(array $pipeline): Response
+    /**
+     * @param array $pipeline
+     * @return Response
+     */
+    public function aggregate($pipeline): Response
     {
         $this->pipeline = $pipeline;
 
         return $this->get();
     }
 
-    public function countUnique(string $key): Response
+    /**
+     * @param string $key
+     * @return Response
+     */
+    public function countUnique($key): Response
     {
         $this->distinct($key);
 
         return $this->count($key);
     }
 
-    public function sum(string $column): Response
+    /**
+     * @param string $column
+     * @return Response
+     */
+    public function sum($column): Response
     {
         return $this->setAggregate(__FUNCTION__, [$column])->get();
     }
 
-    public function avg(string $column): Response
+    /**
+     * @param string $column
+     * @return Response
+     */
+    public function avg($column): Response
     {
         return $this->setAggregate(__FUNCTION__, [$column])->get();
     }
 
-    public function max(string $column): Response
+    /**
+     * @param string $column
+     * @return Response
+     */
+    public function max($column): Response
     {
         return $this->setAggregate(__FUNCTION__, [$column])->get();
     }
 
-    public function min(string $column)
+    /**
+     * @param string $column
+     * @return Response
+     */
+    public function min($column)
     {
         return $this->setAggregate(__FUNCTION__, [$column])->get();
     }
@@ -308,7 +408,12 @@ class Query
         return $this->request();
     }
 
-    public function paginate(int $perPage = 15, int $page = 1): Response
+    /**
+     * @param int $perPage
+     * @param int $page
+     * @return Response
+     */
+    public function paginate($perPage = 15, $page = 1): Response
     {
         $this->pagination = true;
 
