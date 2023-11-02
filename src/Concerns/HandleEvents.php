@@ -20,6 +20,13 @@ trait HandleEvents
             ->put("/projects/{$this->project}/collections/{$this->collection}/events/{$eventId}", $input);
     }
 
+    public function updateEvents(string $field, string $value, array $input): Response
+    {
+        return $this
+            ->client()
+            ->put("/projects/{$this->project}/collections/{$this->collection}/events//condition/{$field}/{$value}", $input);
+    }
+
     public function deleteEvent(string $eventId): Response
     {
         return $this

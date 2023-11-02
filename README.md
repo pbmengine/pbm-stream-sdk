@@ -46,6 +46,13 @@ stream('logins')->record(['user' => 1, 'age' => 30]);
 # update event
 stream('logins')->updateEvent('<event id>', ['age' => 30]);
 
+# update several events with condition
+# field is the condition field with value
+# e.g. field is userId and value is 300
+# stream('logins')->updateEvents('userId', 300, ['age' => 30]);
+# means: update all events where userId is 300 and set age to 30
+stream('logins')->updateEvents('field', 'value', ['age' => 30]);
+
 # delete event
 stream('logins')->deleteEvent('<event id>');
 
