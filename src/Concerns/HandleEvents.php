@@ -24,7 +24,17 @@ trait HandleEvents
     {
         return $this
             ->client()
-            ->put("/projects/{$this->project}/collections/{$this->collection}/events//condition/{$field}/{$value}", $input);
+            ->put("/projects/{$this->project}/collections/{$this->collection}/events/condition/{$field}/{$value}", $input);
+    }
+
+    public function updateEventsWithConditions(array $conditions, array $input): Response
+    {
+        return $this
+            ->client()
+            ->put("/projects/{$this->project}/collections/{$this->collection}/events", [
+                'conditions' => $conditions,
+                'params' => $input]
+            );
     }
 
     public function deleteEvent(string $eventId): Response

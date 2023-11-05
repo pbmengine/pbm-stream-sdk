@@ -53,6 +53,15 @@ stream('logins')->updateEvent('<event id>', ['age' => 30]);
 # means: update all events where userId is 300 and set age to 30
 stream('logins')->updateEvents('field', 'value', ['age' => 30]);
 
+# update events where you have several = conditions
+stream('logins')->updateEventsWithConditions([
+    'event' => 'items.purchased',
+    'customerId' => 5
+], [
+    'age' => 30,
+    'itemsPurchased' => true
+]);
+
 # delete event
 stream('logins')->deleteEvent('<event id>');
 
