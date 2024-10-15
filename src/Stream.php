@@ -19,7 +19,7 @@ class Stream
     use HandleQueries;
 
     protected ?string $collection = null;
-    protected int $timeout = 5;
+    protected int $timeout = 45;
     protected string $url;
     protected string $project;
     protected string $accessKey;
