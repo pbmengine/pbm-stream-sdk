@@ -88,6 +88,18 @@ stream('logins')->createIndex('<field>');
 # drop collection index
 stream('logins')->dropIndex('<field>');
 
+# add new property key to collection
+# - field is the name of the property
+# - defaultValue is the default value for existing documents
+# - type is the type of the property (string, bool, num, array)
+stream('logins')->addPropertyKey(<field>, <defaultValue>, <type>);
+
+# delete property key from collection
+stream('logins')->deletePropertyKey(<field>);
+
+# rename property key in collection
+stream('logins')->renamePropertyKey(<oldField>, <newField>);
+
 # query options
 $response = stream('logins')
     ->query()
