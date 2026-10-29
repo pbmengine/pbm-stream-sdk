@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pbmengine\Stream;
 
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
 class StreamServiceProvider extends ServiceProvider
@@ -9,7 +12,7 @@ class StreamServiceProvider extends ServiceProvider
     /**
      * Bootstrap the application services.
      */
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -21,15 +24,17 @@ class StreamServiceProvider extends ServiceProvider
     /**
      * Register the application services.
      */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'pbm-stream');
 
-        $this->app->singleton(Stream::class, function ($app) {
+        $this->app->singleton(Stream::class, function (Application $app): Stream {
+            $config = $app['config']['pbm-stream'];
+
             return new Stream(
-                $app['config']['pbm-stream']['url'],
-                $app['config']['pbm-stream']['project'],
-                $app['config']['pbm-stream']['access_key']
+                (string) $config['url'],
+                (string) $config['project'],
+                (string) $config['access_key']
             );
         });
     }

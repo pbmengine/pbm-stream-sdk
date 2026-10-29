@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pbmengine\Stream;
 
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
+use LogicException;
 use Pbmengine\Stream\Concerns\HandleEvents;
 use Pbmengine\Stream\Concerns\HandleProjects;
 use Pbmengine\Stream\Concerns\HandleQueries;
@@ -24,7 +27,7 @@ class Stream
     protected string $project;
     protected string $accessKey;
 
-    public function __construct($url, $project, $accessKey)
+    public function __construct(string $url, string $project, string $accessKey)
     {
         $this->url = $url;
         $this->project = $project;
@@ -59,6 +62,10 @@ class Stream
 
     public function getCollection(): string
     {
+        if ($this->collection === null || $this->collection === '') {
+            throw new LogicException('No collection set. Call setCollection() or use stream(\'<collection>\') first.');
+        }
+
         return $this->collection;
     }
 
@@ -67,6 +74,16 @@ class Stream
         $this->timeout = $timeout;
 
         return $this;
+    }
+
+    /**
+     * Build a request path from raw segments. Each segment is percent-encoded so
+     * caller-supplied values (ids, field names, ...) cannot alter the request
+     * target, e.g. via "../", "?" or "#".
+     */
+    public function path(string ...$segments): string
+    {
+        return '/'.implode('/', array_map(rawurlencode(...), $segments));
     }
 
     public function client(): PendingRequest

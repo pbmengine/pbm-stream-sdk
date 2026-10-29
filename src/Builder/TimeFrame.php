@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pbmengine\Stream\Builder;
 
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Str;
 
 class TimeFrame
@@ -41,14 +44,18 @@ class TimeFrame
         return array_key_exists($value, self::KEYS);
     }
 
-    public static function isStartGreaterThanEndDate(Carbon $start, Carbon $end): bool
+    public static function isStartGreaterThanEndDate(CarbonInterface $start, CarbonInterface $end): bool
     {
         return $start->greaterThanOrEqualTo($end);
     }
 
+    /**
+     * @return array{0: string, 1: string}
+     */
     public static function byKey(string $key, int $value): array
     {
-        $now = now();
+        // Use mutable Carbon explicitly: the app may configure immutable dates via Date::use().
+        $now = Carbon::now();
         $nowCloned = clone $now;
 
         if (self::includeThis($key)) {
@@ -84,7 +91,7 @@ class TimeFrame
             case('year'):
                 return $date->subYears($value)->startOfYear();
             default:
-                return now();
+                return Carbon::now();
         }
     }
 
@@ -104,7 +111,7 @@ class TimeFrame
             case('year'):
                 return $date->subYears(1)->endOfYear();
             default:
-                return now();
+                return Carbon::now();
         }
     }
 
@@ -113,12 +120,12 @@ class TimeFrame
         return self::KEYS[$key];
     }
 
-    protected static function includeThis($key): bool
+    protected static function includeThis(string $key): bool
     {
         return Str::contains($key, 'this');
     }
 
-    protected static function includePrevious($key): bool
+    protected static function includePrevious(string $key): bool
     {
         return Str::contains($key, 'previous');
     }

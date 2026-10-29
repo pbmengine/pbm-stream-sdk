@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     /*
      | -------------------------------------
-     | laskjdalskdjal
+     | PBM Stream API
      | -------------------------------------
      |
-     | aksjhdkjhsakd
+     | Base URL of the PBM Stream API (always use https), the project id
+     | and the access key that is sent as Authorization header.
      |
      */
     'url' => env('PBM_STREAM_URL', ''),

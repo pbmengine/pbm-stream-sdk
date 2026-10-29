@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pbmengine\Stream\Concerns;
 
 use Illuminate\Http\Client\Response;
