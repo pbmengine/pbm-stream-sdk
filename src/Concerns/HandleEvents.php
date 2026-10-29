@@ -1,37 +1,52 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pbmengine\Stream\Concerns;
 
 use Illuminate\Http\Client\Response;
 
 trait HandleEvents
 {
+    /**
+     * @param array<string, mixed> $input
+     */
     public function record(array $input): Response
     {
         return $this
             ->client()
-            ->post("/projects/{$this->project}/collections/{$this->collection}/events", $input);
+            ->post($this->path('projects', $this->project, 'collections', $this->getCollection(), 'events'), $input);
     }
 
+    /**
+     * @param array<string, mixed> $input
+     */
     public function updateEvent(string $eventId, array $input): Response
     {
         return $this
             ->client()
-            ->put("/projects/{$this->project}/collections/{$this->collection}/events/{$eventId}", $input);
+            ->put($this->path('projects', $this->project, 'collections', $this->getCollection(), 'events', $eventId), $input);
     }
 
+    /**
+     * @param array<string, mixed> $input
+     */
     public function updateEvents(string $field, string $value, array $input): Response
     {
         return $this
             ->client()
-            ->put("/projects/{$this->project}/collections/{$this->collection}/events/condition/{$field}/{$value}", $input);
+            ->put($this->path('projects', $this->project, 'collections', $this->getCollection(), 'events', 'condition', $field, $value), $input);
     }
 
+    /**
+     * @param array<mixed> $conditions
+     * @param array<string, mixed> $input
+     */
     public function updateEventsWithConditions(array $conditions, array $input): Response
     {
         return $this
             ->client()
-            ->put("/projects/{$this->project}/collections/{$this->collection}/events", [
+            ->put($this->path('projects', $this->project, 'collections', $this->getCollection(), 'events'), [
                 'conditions' => $conditions,
                 'params' => $input]
             );
@@ -41,6 +56,6 @@ trait HandleEvents
     {
         return $this
             ->client()
-            ->delete("/projects/{$this->project}/collections/{$this->collection}/events/{$eventId}");
+            ->delete($this->path('projects', $this->project, 'collections', $this->getCollection(), 'events', $eventId));
     }
 }

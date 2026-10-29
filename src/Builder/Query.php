@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pbmengine\Stream\Builder;
 
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
@@ -14,11 +17,15 @@ class Query
 
     /**
      * The where constraints for the query.
+     *
+     * @var array<int, array<string, mixed>>|null
      */
     protected ?array $wheres = null;
 
     /**
      * The columns that should be returned.
+     *
+     * @var array<int, string>
      */
     protected array $columns = ['*'];
 
@@ -30,16 +37,22 @@ class Query
 
     /**
      * Aggregate function and column to be run
+     *
+     * @var array<string, mixed>|null
      */
     protected ?array $aggregate = null;
 
     /**
      * The groupings for the query.
+     *
+     * @var array<int, mixed>|null
      */
     protected ?array $groups = null;
 
     /**
      * The orderings for the query.
+     *
+     * @var array<int, array{column: string, direction: string}>|null
      */
     protected ?array $orders = null;
 
@@ -61,6 +74,8 @@ class Query
     /**
      * The timeframe for the query
      * startDateTime, endDateTime ISO8601 String
+     *
+     * @var array<int, string>|null
      */
     protected ?array $timeFrame = null;
 
@@ -71,11 +86,15 @@ class Query
 
     /**
      * pipeline as array see aggregation pipelines
+     *
+     * @var array<mixed>|null
      */
     protected ?array $pipeline = null;
 
     /**
      * All of the available clause operators.
+     *
+     * @var array<int, string>
      */
     public array $operators = [
         '=', '<', '>', '<=', '>=', '<>', '!=',
@@ -92,7 +111,7 @@ class Query
         $this->stream = $stream;
     }
 
-    public function groupBy(...$groups): self
+    public function groupBy(mixed ...$groups): self
     {
         foreach ($groups as $group) {
             $this->groups = array_merge(
@@ -176,7 +195,7 @@ class Query
     }
 
     /**
-     * @param array $columns
+     * @param array<int, string> $columns
      * @return $this
      */
     public function select($columns = ['*']): self
@@ -193,13 +212,13 @@ class Query
      */
     public function timeFrame($start, $end): self
     {
-        if (TimeFrame::inKeys($start) && is_int($end)) {
+        if (is_string($start) && TimeFrame::inKeys($start) && is_int($end)) {
             $this->timeFrame = TimeFrame::byKey($start, (int)$end);
 
             return $this;
         }
 
-        if ($start instanceof Carbon && $end instanceof Carbon) {
+        if ($start instanceof CarbonInterface && $end instanceof CarbonInterface) {
             if (TimeFrame::isStartGreaterThanEndDate($start, $end)) {
                 throw new \InvalidArgumentException('start date can not be greater or equal as end date');
             }
@@ -213,11 +232,11 @@ class Query
         }
 
         // here we check if either start or end is carbon instance
-        $start = $start instanceof Carbon
+        $start = $start instanceof CarbonInterface
             ? $start
             : Carbon::parse($start);
 
-        $end = $end instanceof Carbon
+        $end = $end instanceof CarbonInterface
             ? $end
             : Carbon::parse($end);
 
@@ -317,7 +336,7 @@ class Query
 
     /**
      * @param string $function
-     * @param array $columns
+     * @param array<int, mixed> $columns
      * @return $this
      */
     protected function setAggregate($function, $columns): self
@@ -327,11 +346,18 @@ class Query
         return $this;
     }
 
+    /**
+     * @param string $columns
+     */
     public function count($columns = '*'): Response
     {
         return $this->setAggregate(__FUNCTION__, [$columns])->get();
     }
 
+    /**
+     * @param string|false $column
+     * @return $this
+     */
     public function distinct($column = false): self
     {
         $this->distinct = true;
@@ -344,7 +370,7 @@ class Query
     }
 
     /**
-     * @param array $pipeline
+     * @param array<mixed> $pipeline
      * @return Response
      */
     public function aggregate($pipeline): Response
@@ -396,7 +422,7 @@ class Query
      * @param string $column
      * @return Response
      */
-    public function min($column)
+    public function min($column): Response
     {
         return $this->setAggregate(__FUNCTION__, [$column])->get();
     }
@@ -427,16 +453,19 @@ class Query
         return $this->stream
             ->client()
             ->post(
-                "/projects/{$this->stream->getProject()}/collections/{$this->stream->getCollection()}/query",
+                $this->stream->path('projects', $this->stream->getProject(), 'collections', $this->stream->getCollection(), 'query'),
                 $this->explain()
             );
     }
 
     public function encodedQuery(): string
     {
-        return base64_encode(json_encode($this->explain()));
+        return base64_encode(json_encode($this->explain(), JSON_THROW_ON_ERROR));
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function explain(): array
     {
         return [

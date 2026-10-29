@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pbmengine\Stream\Builder;
 
 class Interval
@@ -22,6 +24,6 @@ class Interval
 
     public static function exists(string $key): bool
     {
-        return in_array($key, self::KEYS);
+        return in_array($key, self::KEYS, true);
     }
 }

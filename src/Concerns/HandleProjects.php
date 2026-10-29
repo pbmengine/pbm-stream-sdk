@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pbmengine\Stream\Concerns;
 
 use Illuminate\Http\Client\Response;
@@ -10,30 +12,24 @@ trait HandleProjects
     {
         return $this
             ->client()
-            ->get("/projects/{$this->project}");
+            ->get($this->path('projects', $this->project));
     }
 
     public function collections(): Response
     {
         return $this
             ->client()
-            ->get("/projects/{$this->project}/collections");
+            ->get($this->path('projects', $this->project, 'collections'));
     }
 
     public function collection(): Response
     {
         return $this
             ->client()
-            ->get("/projects/{$this->project}/collections/{$this->collection}");
+            ->get($this->path('projects', $this->project, 'collections', $this->getCollection()));
     }
 
-    /**
-     * @param $field
-     * @param $defaultValue
-     * @param $propertyType
-     * @return Response
-     */
-    public function addPropertyKey($field, $defaultValue, $propertyType): Response
+    public function addPropertyKey(string $field, mixed $defaultValue, string $propertyType): Response
     {
         $data = [
             'key' => $field,
@@ -43,14 +39,10 @@ trait HandleProjects
 
         return $this
             ->client()
-            ->post("/projects/{$this->project}/collections/{$this->collection}/properties", $data);
+            ->post($this->path('projects', $this->project, 'collections', $this->getCollection(), 'properties'), $data);
     }
 
-    /**
-     * @param string $field
-     * @return Response
-     */
-    public function deletePropertyKey($field): Response
+    public function deletePropertyKey(string $field): Response
     {
         $data = [
             'key' => $field,
@@ -58,15 +50,10 @@ trait HandleProjects
 
         return $this
             ->client()
-            ->delete("/projects/{$this->project}/collections/{$this->collection}/properties", $data);
+            ->delete($this->path('projects', $this->project, 'collections', $this->getCollection(), 'properties'), $data);
     }
 
-    /**
-     * @param string $oldField
-     * @param string $newField
-     * @return Response
-     */
-    public function renamePropertyKey($oldField, $newField): Response
+    public function renamePropertyKey(string $oldField, string $newField): Response
     {
         $data = [
             'old_key' => $oldField,
@@ -75,27 +62,30 @@ trait HandleProjects
 
         return $this
             ->client()
-            ->put("/projects/{$this->project}/collections/{$this->collection}/properties", $data);
+            ->put($this->path('projects', $this->project, 'collections', $this->getCollection(), 'properties'), $data);
     }
 
     public function createIndex(string $field): Response
     {
         return $this
             ->client()
-            ->post("/projects/{$this->project}/collections/{$this->collection}/indexes/{$field}");
+            ->post($this->path('projects', $this->project, 'collections', $this->getCollection(), 'indexes', $field));
     }
 
     public function dropIndex(string $field): Response
     {
         return $this
             ->client()
-            ->delete("/projects/{$this->project}/collections/{$this->collection}/indexes/{$field}");
+            ->delete($this->path('projects', $this->project, 'collections', $this->getCollection(), 'indexes', $field));
     }
 
+    /**
+     * @param array<string, mixed> $event
+     */
     public function validateEvent(array $event): Response
     {
         return $this
             ->client()
-            ->post("/projects/{$this->project}/collections/{$this->collection}/validation", $event);
+            ->post($this->path('projects', $this->project, 'collections', $this->getCollection(), 'validation'), $event);
     }
 }

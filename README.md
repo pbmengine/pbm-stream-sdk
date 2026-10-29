@@ -3,6 +3,13 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/gemzio/pbm-stream-sdk.svg?style=flat-square)](https://packagist.org/packages/pbmengine/pbm-stream-sdk)
 [![Total Downloads](https://img.shields.io/packagist/dt/gemzio/pbm-stream-sdk.svg?style=flat-square)](https://packagist.org/packages/pbmengine/pbm-stream-sdk)
 
+## Requirements
+
+| SDK   | PHP       | Laravel |
+|-------|-----------|---------|
+| 2.3.x | 8.2 – 8.4 | 12, 13  |
+| 2.2.x | 7.4 – 8.4 | 7 – 12  |
+
 ## Installation
 
 You can install the package via composer:
@@ -109,7 +116,7 @@ $response = stream('logins')
     ->orWhere('b', '>', 6)
     ->timeFrame('<start date iso 8601>', '<end date iso 8601>')
     ->timeFrame(TimeFrame::THIS_DAYS, 5)
-    ->timeFrame(TimeFrame::PREVIOUS_DAYS, 6)
+    ->timeFrame(TimeFrame::PREV_DAYS, 6)
     ->groupBy('<column>') // (['field a', 'field b'])
     ->orderBy('<column>', 'asc') // second parameter is optional, default is asc 
     ->orderByDesc('<column>') // order desc
